@@ -31,6 +31,7 @@ private:
     // nodeMappings → ordered mapping of each point to its corresponding node.
     map<long, Node*> nodeMappings;
     // hashFunction → converts a string (request ID or virtual point) into a numeric hash.
+    // hashFunction is a variable that can store any function taking const string& and returning long.
     function<long(const string&)> hashFunction;
     int pointMultiplier;
 
@@ -62,9 +63,17 @@ public:
     }
 
     Node* getAssignedNode(Request* request) {
+        // now we have to find the server nearest to that req clockwise 
         long key = hashFunction(request->id);
+        // upper_bound(key) finds the first node whose position is strictly greater than key.
+// Example: if key = 150, and the ring has nodes at [100, 200, 300] → upper_bound(150) points to 200.
         auto it = nodeMappings.upper_bound(key); // higherEntry equivalent
+        // If the request’s position is greater than all nodes on the ring (e.g., key = 350 in [100, 200, 300]),
+// then upper_bound returns end() (past the last element).
+
+// In that case, you wrap around to the first node in the ring (smallest key).
         if (it == nodeMappings.end()) {
+            // give the first node 
             return nodeMappings.begin()->second;
         } else {
             return it->second;
@@ -87,9 +96,13 @@ int main() {
     
     Node n1("Node1", 1);
     Node n2("Node2", 1);
+    Node n3("Node3", 1);
+    Node n4("Node5", 1);
 
     ch.addNode(&n1);
     ch.addNode(&n2);
+    ch.addNode(&n3);
+    ch.addNode(&n4);
 
     Request r1("RequestA");
     Request r2("RequestB");
@@ -100,6 +113,9 @@ int main() {
     return 0;
 }
 
+
+// ^ to_string(i * pointMultiplier + j) + node->id
+// ^ it is used to generate different strings, so that simpleHash produces different numbers for the same node. 
 
 // 🔹 What you said (and the tweaks)
 

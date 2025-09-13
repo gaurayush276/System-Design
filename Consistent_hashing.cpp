@@ -92,23 +92,41 @@ long simpleHash(const string& s) {
 
 // Example usage
 int main() {
-    ConsistentHashing ch(simpleHash, 3);
+
+      hash< string > hashMaker ; 
+    ConsistentHashing ch (hashMaker , 6 ) ; 
+    Node n1("user100" , 1) ;
+    Node n2( "user234" , 1) ;
+    Node n3( "user355" , 1) ;
+    Node n4( "user466" , 1) ;
+
+    ch.addNode ( &n1 ) ;
+    ch.addNode ( &n2 ) ;
+    ch.addNode ( &n3 ) ;
+    ch.addNode ( &n4 ) ;
+
+    Request r1 ("ayush") ;
+    Request r2 ("peter") ;
+
+    cout << "R1 is assigned to :" << ch.getAssignedNode(&r1)->id <<endl ;
+    cout << "R2 is assigned to :" << ch.getAssignedNode(&r2)->id ;
+    // ConsistentHashing ch(simpleHash, 3);
     
-    Node n1("Node1", 1);
-    Node n2("Node2", 1);
-    Node n3("Node3", 1);
-    Node n4("Node5", 1);
+    // Node n1("Node1", 1);
+    // Node n2("Node2", 1);
+    // Node n3("Node3", 1);
+    // Node n4("Node5", 1);
 
-    ch.addNode(&n1);
-    ch.addNode(&n2);
-    ch.addNode(&n3);
-    ch.addNode(&n4);
+    // ch.addNode(&n1);
+    // ch.addNode(&n2);
+    // ch.addNode(&n3);
+    // ch.addNode(&n4);
 
-    Request r1("RequestA");
-    Request r2("RequestB");
+    // Request r1("RequestA");
+    // Request r2("RequestB");
 
-    cout << "RequestA assigned to: " << ch.getAssignedNode(&r1)->id << endl;
-    cout << "RequestB assigned to: " << ch.getAssignedNode(&r2)->id << endl;
+    // cout << "RequestA assigned to: " << ch.getAssignedNode(&r1)->id << endl;
+    // cout << "RequestB assigned to: " << ch.getAssignedNode(&r2)->id << endl;
 
     return 0;
 }
